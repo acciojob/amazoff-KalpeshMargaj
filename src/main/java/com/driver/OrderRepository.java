@@ -10,6 +10,16 @@ import java.util.List;
 import static com.driver.Order.getDeliveryTimeInt;
 @Repository
 public class OrderRepository {
+    public OrderRepository() {
+    }
+
+    public OrderRepository(HashMap<String, Order> orderDb, HashMap<String, DeliveryPartner> partnerDb, HashMap<String, String> orderPartnerDb, HashMap<String, HashSet<String>> partnerOrderListDb) {
+        this.orderDb = orderDb;
+        this.partnerDb = partnerDb;
+        this.orderPartnerDb = orderPartnerDb;
+        this.partnerOrderListDb = partnerOrderListDb;
+    }
+
     HashMap<String,Order> orderDb = new HashMap<>();
     HashMap<String ,DeliveryPartner> partnerDb = new HashMap<>();
     HashMap<String,String> orderPartnerDb = new HashMap<>();
@@ -47,9 +57,14 @@ public class OrderRepository {
 
     public int getOrderCountByPartnerId(String partnerId)
     {
-        HashSet<String> l=partnerOrderListDb.get(partnerId);
-        int ans = l.size();
-        return ans;
+        if(partnerOrderListDb.get(partnerId) != null) {
+            HashSet<String> l = partnerOrderListDb.get(partnerId);
+            int ans = l.size();
+            return ans;
+        }
+        else {
+            return 0;
+        }
     }
     public List<String> getOrdersByPartnerId(String partnerId)
     {

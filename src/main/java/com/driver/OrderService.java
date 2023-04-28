@@ -11,6 +11,13 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    public OrderService() {
+    }
+
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     public void addOrder(Order order)
     {
         orderRepository.addOrder(order);
@@ -59,6 +66,7 @@ public class OrderService {
     public String getLastDeliveryTimeByPartnerId(String partnerId) {
         return orderRepository.getLastDeliveryTimeByPartnerId(partnerId);
     }
+
 
     public void deletePartnerById(String partnerId) {
         orderRepository.deletePartnerById(partnerId);
