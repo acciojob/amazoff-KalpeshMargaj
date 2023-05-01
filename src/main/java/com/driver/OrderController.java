@@ -23,6 +23,7 @@ public class OrderController {
     OrderService orderService;
 
     public OrderController() {
+        this.orderService=new OrderService();
     }
 
     public OrderController(OrderService orderService) {
