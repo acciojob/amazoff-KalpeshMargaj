@@ -2,10 +2,7 @@ package com.driver;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static com.driver.Order.getDeliveryTimeInt;
 @Repository
@@ -40,9 +37,16 @@ public class OrderRepository {
     public void addOrderPartnerPair(String orderID,String partnerID)
     {
         orderPartnerDb.put(orderID,partnerID);
-        HashSet<String> ans =partnerOrderListDb.get(partnerID);
+        HashSet<String> ans=new HashSet<>();
+        if(partnerOrderListDb.containsKey(partnerID))
+        {
+            ans =partnerOrderListDb.get(partnerID);
+        }
         ans.add(orderID);
         partnerOrderListDb.put(partnerID,ans);
+        DeliveryPartner partner = getPartnerById(partnerID);
+        partner.setNumberOfOrders(partner.getNumberOfOrders() + 1);
+        addPartner(partner);
     }
 
     public Order getOrderById(String orderId)
@@ -133,7 +137,8 @@ public class OrderRepository {
     public void deletePartnerById(String partnerId) {
 //        partnerDb.remove(partnerId);
         partnerOrderListDb.remove(partnerId);
-        for(String orderId:orderPartnerDb.keySet())
+        Set<String> set = Set.copyOf(orderPartnerDb.keySet());
+        for(String orderId:set)
         {
             if(orderPartnerDb.get(orderId)==partnerId)
             {
@@ -144,7 +149,8 @@ public class OrderRepository {
 
     public void deleteOrderById(String orderId) {
 //        orderDb.remove(orderId);
-        for(String order : orderPartnerDb.keySet())
+        Set<String> set = Set.copyOf(orderPartnerDb.keySet());
+        for(String order : set)
         {
             if(order==orderId)
             {
